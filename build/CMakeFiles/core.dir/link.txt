@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe qc libcore.a CMakeFiles/core.dir/utils.cpp.obj CMakeFiles/core.dir/laplacian_pyramid.cpp.obj
+C:\msys64\mingw64\bin\ranlib.exe libcore.a
