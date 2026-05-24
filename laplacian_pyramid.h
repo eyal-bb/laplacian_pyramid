@@ -28,10 +28,13 @@ cv::Mat down_sampling(const cv::Mat &image, const cv::Mat& kernel_1d);
 
 cv::Mat up_sampling(const cv::Mat &image, const cv::Mat& kernel_1d);
 
-// TODO: implement a rebuilt function
-std::vector<cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const cv::Mat& kernel_1d, const int num_levels);
+std::pair<std::vector<cv::Mat>, cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const size_t kernel_size, const int num_levels);
 
-void show(const cv::Mat &image);
+void show(const cv::Mat &image, const std::string title="", const bool normalize=false);
+
+void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize=false);
+
+cv::Mat add_multiscale_noise(const cv::Mat& image, const int noise_levels, const float noise_level);
 
 float reconstruct_and_compare(const std::vector<cv::Mat>& laplacian_pyramid, const cv::Mat& kernel_1d, const cv::Mat& image);
 

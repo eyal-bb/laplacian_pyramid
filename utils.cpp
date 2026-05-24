@@ -6,14 +6,15 @@
 cv::Mat load_img(const std::string& path)
 {
     cv::Mat image = cv::imread(path, cv::IMREAD_GRAYSCALE);
-    if (image.empty()) {
-        std::cout << "Could not open: " << path << std::endl;
-        return cv::Mat{};
-    }
+
+    if (image.empty())
+        throw std::invalid_argument("Image is empty");
+
     std::cout << "Image loaded successfully!" << std::endl;
     return image;
 }
 
+ // TODO: crop_img is implemented using cv::Range since it is not used for the core algorithm (not implemented manually using raw pointers)
 cv::Mat crop_img(const cv::Mat &image, const std::size_t size_crop)
 {
     auto calc_start = [](const std::size_t size_image, const std::size_t size_crop) {
@@ -47,6 +48,8 @@ int binomial_coefficient(int n, int k)
 
 int power(const int x, const int pow)
 {
+    if (pow < 0)
+        throw std::invalid_argument("pow should be non-negative");
     int res = 1;
     for (int i = 0; i < pow; ++i) 
         res *= x;

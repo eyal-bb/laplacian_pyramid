@@ -5,8 +5,8 @@
 
 cv::Mat calc_kernel_1d(const int kernel_size)
 {
-    if (kernel_size % 2 == 0 || kernel_size < 3 || kernel_size > 11)
-        throw std::invalid_argument("Kernel should be odd and in range [3, 11]");
+    if (kernel_size < 2 || kernel_size > 12)
+        throw std::invalid_argument("Kernel should be odd and in range [2, 12]");
 
     cv::Mat kernel_1d = cv::Mat::zeros(1, kernel_size, CV_32FC1);
     float* ptr = kernel_1d.ptr<float>(0);
@@ -109,9 +109,11 @@ cv::Mat up_sampling(const cv::Mat &image, const cv::Mat& kernel_1d)
     return image_up_sampled;
 }
 
-// TODO: implement a rebuilt function
-std::vector<cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const cv::Mat& kernel_1d, const int num_levels)
+std::pair<std::vector<cv::Mat>, cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const size_t kernel_size, const int num_levels)
 {
+    if (kernel_size % 2 == 0)
+        throw std::invalid_argument("Kernel should be odd");
+
     if (image.type() != CV_32FC1)
         throw std::invalid_argument("Image should be of type float");
 
@@ -121,9 +123,12 @@ std::vector<cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const cv::Mat&
     if ((image.cols % power(2, num_levels) != 0) || (image.rows % power(2, num_levels) != 0))
         throw std::invalid_argument("Image size should be of divisible by 2 num_levels (" + std::to_string(num_levels) + ") times");
 
-    if (kernel_1d.type() != CV_32FC1 || kernel_1d.rows != 1 || kernel_1d.cols % 2 == 0)
-        throw std::invalid_argument("Kernel should be a row vector of odd size and type float");
+    const auto kernel_1d = calc_kernel_1d(kernel_size);
 
+    // check kernel_1d validity, although it should be valid if calc_kernel_1d is implemented correctly
+    if (kernel_1d.rows != 1 || kernel_1d.cols % 2 == 0)
+        throw std::invalid_argument("Kernel should be a row vector of odd size and type float");
+        
     std::vector<cv::Mat> laplacian_pyramid{};
     auto g_low = image;
     for (int level = 0; level < num_levels; ++level)
@@ -134,15 +139,7 @@ std::vector<cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const cv::Mat&
         g_low = g_high;
     }
     laplacian_pyramid.push_back(g_low);
-    return laplacian_pyramid;
-}
-
-void show(const cv::Mat &image)
-{
-    cv::namedWindow("Image", cv::WINDOW_NORMAL);
-    cv::imshow("Image", image);
-    const int key = cv::waitKey(0);
-    std::cout << "Key pressed: " << key << std::endl;
+    return {laplacian_pyramid, kernel_1d};
 }
 
 cv::Mat upsample_n_times(const cv::Mat& image, const cv::Mat& kernel_1d, const int n)
@@ -181,29 +178,43 @@ cv::Mat reconstruct_from_laplacian_pyramid(const std::vector<cv::Mat>& laplacian
     return sum_laplacian_pyramid;
 }
 
+void show(const cv::Mat &image, const std::string title, const bool normalize)
+{
+    cv::Mat display = image;
+    if (normalize)
+    {
+        cv::normalize(image, display, 0.0f, 1.0f, cv::NORM_MINMAX);
+    }
+    cv::namedWindow(title, cv::WINDOW_NORMAL);
+    cv::resizeWindow(title, 512, 512);
+    // cv::moveWindow(title, 0, 0);
+    cv::imshow(title, image);
+    const int key = cv::waitKey(0);
+}
+
+void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize) {
+    int level{};
+    for (const auto& laplacian_pyramid_level : laplacian_pyramid) {
+        show(laplacian_pyramid_level, "level" + std::to_string(level), normalize);
+        ++level;
+    }
+}
+
 void run_laplacian_pyramid()
 {
-    constexpr std::size_t SIZE_IMG{2048};
+    constexpr std::size_t size_img{2048};
     constexpr std::size_t kernel_size{5};
-    constexpr int num_levels{8};
+    constexpr int num_levels{6};
     const std::string path_img = "C:/Users/USER/C++_projects/laplacian_pyramid/Turtle.jpg";
-    
-    cv::Mat image = load_img(path_img);
-    
-    if (image.empty())
-        throw std::invalid_argument("Image is empty");
 
-    image = crop_img(image, SIZE_IMG);
+    cv::Mat image = load_img(path_img);
+    image = crop_img(image, size_img);
     image.convertTo(image, CV_32FC1, 1 / 255.0F);
     
-    show(image);
-
-    auto kernel_1d = calc_kernel_1d(kernel_size);
-    auto laplacian_pyramid = calc_laplacian_pyramid(image, kernel_1d, num_levels);
-    for (const auto& laplacian_pyramid_level : laplacian_pyramid) {
-        show(laplacian_pyramid_level);
-    }
-
+    const auto &[laplacian_pyramid, kernel_1d] = calc_laplacian_pyramid(image, kernel_size, num_levels);
     auto relative_error = reconstruct_and_compare(laplacian_pyramid, kernel_1d, image);
-    std::cout << "relative error in reconstruction" << relative_error << std::endl;
+    std::cout << "relative error in reconstruction- " << relative_error << std::endl;
+
+    show(image, "image", true);
+    display_laplacian_pyramid(laplacian_pyramid, true);
 }
