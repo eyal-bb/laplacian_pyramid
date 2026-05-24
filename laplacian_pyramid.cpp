@@ -189,6 +189,7 @@ void show(const cv::Mat &image, const std::string title, const bool normalize)
     cv::resizeWindow(title, 512, 512);
     // cv::moveWindow(title, 0, 0);
     cv::imshow(title, image);
+    std::cout << "Press any key to continue" << std::endl;
     const int key = cv::waitKey(0);
 }
 
@@ -200,15 +201,12 @@ void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, co
     }
 }
 
-void run_laplacian_pyramid()
+void run_laplacian_pyramid(const std::string image_name, const int kernel_size, const int num_levels, const int size_crop, std::string image_folder, const bool show_figures)
 {
-    constexpr std::size_t size_img{2048};
-    constexpr std::size_t kernel_size{5};
-    constexpr int num_levels{6};
-    const std::string path_img = "C:/Users/USER/C++_projects/laplacian_pyramid/Turtle.jpg";
-
-    cv::Mat image = load_img(path_img);
-    image = crop_img(image, size_img);
+    if (image_folder == "")
+        image_folder = std::string(PROJECT_DIR) + "/";
+    cv::Mat image = load_img(image_folder + image_name);
+    image = crop_img(image, size_crop);
     image.convertTo(image, CV_32FC1, 1 / 255.0F);
     
     auto start = std::chrono::high_resolution_clock::now();
@@ -220,6 +218,9 @@ void run_laplacian_pyramid()
     auto relative_error = reconstruct_and_compare(laplacian_pyramid, kernel_1d, image);
     std::cout << "relative error in reconstruction- " << relative_error << std::endl;
 
-    show(image, "image", true);
-    display_laplacian_pyramid(laplacian_pyramid, true);
+    if (show_figures)
+    {
+        show(image, "image", true);
+        display_laplacian_pyramid(laplacian_pyramid, true);
+    }
 }

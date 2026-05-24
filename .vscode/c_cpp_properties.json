@@ -11,7 +11,8 @@
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "PROJECT_DIR=\"C:/Users/USER/C++_projects/laplacian_pyramid\""
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",
@@ -20,4 +21,6 @@
         }
     ],
     "version": 4
+
+    
 }

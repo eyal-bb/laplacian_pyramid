@@ -13,6 +13,7 @@ add_compile_options(-O3)
 add_library(core STATIC utils.cpp laplacian_pyramid.cpp)
 target_include_directories(core PUBLIC ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(core PUBLIC ${OpenCV_LIBS})
+target_compile_definitions(core PRIVATE PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 
 add_executable(laplacian_pyramid main.cpp)
 target_link_libraries(laplacian_pyramid PRIVATE core)
