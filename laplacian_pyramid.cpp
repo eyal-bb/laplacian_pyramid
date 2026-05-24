@@ -71,6 +71,8 @@ cv::Mat blur_img_1d(const cv::Mat &image, const cv::Mat& kernel_1d, const Convol
 
 cv::Mat blur_img(const cv::Mat& image, const cv::Mat& kernel_1d)
 {
+    if (image.rows < kernel_1d.total() || image.cols < kernel_1d.total())
+        throw std::invalid_argument("blur_img input image is smaller than kernel size");
     auto image_blurred = blur_img_1d(image, kernel_1d, ConvolutionAxis::x);
     image_blurred = blur_img_1d(image_blurred, kernel_1d, ConvolutionAxis::y);
     return image_blurred;
@@ -121,7 +123,10 @@ std::pair<std::vector<cv::Mat>, cv::Mat> calc_laplacian_pyramid(const cv::Mat& i
         throw std::invalid_argument("Number of levels should be in range [1, 8]");
 
     if ((image.cols % power(2, num_levels) != 0) || (image.rows % power(2, num_levels) != 0))
-        throw std::invalid_argument("Image size should be of divisible by 2 num_levels (" + std::to_string(num_levels) + ") times");
+        throw std::invalid_argument("Image size should be divisible by 2 num_levels (" + std::to_string(num_levels) + ") times");
+
+    if ((image.cols / power(2, num_levels) < kernel_size) || (image.rows / power(2, num_levels) < kernel_size))
+        throw std::invalid_argument("image size at the last pyramid level is smaller than kernel size");
 
     const auto kernel_1d = calc_kernel_1d(kernel_size);
 
@@ -183,9 +188,8 @@ void run_laplacian_pyramid(const std::string image_name, const int kernel_size, 
     if (image_folder == "")
         image_folder = std::string(PROJECT_DIR) + "/";
     cv::Mat image = load_img(image_folder + image_name);
-    image = crop_img(image, size_crop);
-    image.convertTo(image, CV_32FC1, 1 / 255.0F);
-    
+    image = prepare_image(image, size_crop);
+
     auto start = std::chrono::high_resolution_clock::now();
     const auto &[laplacian_pyramid, kernel_1d] = calc_laplacian_pyramid(image, kernel_size, num_levels);
     auto end = std::chrono::high_resolution_clock::now();

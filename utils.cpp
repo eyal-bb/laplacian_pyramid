@@ -74,7 +74,17 @@ void show(const cv::Mat &image, const std::string title, const bool normalize)
 void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize) {
     int level{};
     for (const auto& laplacian_pyramid_level : laplacian_pyramid) {
-        show(laplacian_pyramid_level, "level" + std::to_string(level), normalize);
+        show(laplacian_pyramid_level, "level " + std::to_string(level), normalize);
         ++level;
     }
+}
+
+cv::Mat prepare_image(const cv::Mat &image, const int size_crop)
+{
+    cv::Mat image_cropped{};
+    if (size_crop > 0)
+        image_cropped = crop_img(image, size_crop);
+        std::cout << "Croping image to " << std::to_string(size_crop) << " size" << std::endl;
+    image_cropped.convertTo(image_cropped, CV_32FC1, 1 / 255.0F);
+    return image_cropped;
 }
