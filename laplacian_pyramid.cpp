@@ -178,29 +178,6 @@ cv::Mat reconstruct_from_laplacian_pyramid(const std::vector<cv::Mat>& laplacian
     return sum_laplacian_pyramid;
 }
 
-void show(const cv::Mat &image, const std::string title, const bool normalize)
-{
-    cv::Mat display = image;
-    if (normalize)
-    {
-        cv::normalize(image, display, 0.0f, 1.0f, cv::NORM_MINMAX);
-    }
-    cv::namedWindow(title, cv::WINDOW_NORMAL);
-    cv::resizeWindow(title, 512, 512);
-    // cv::moveWindow(title, 0, 0);
-    cv::imshow(title, image);
-    std::cout << "Press any key to continue" << std::endl;
-    const int key = cv::waitKey(0);
-}
-
-void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize) {
-    int level{};
-    for (const auto& laplacian_pyramid_level : laplacian_pyramid) {
-        show(laplacian_pyramid_level, "level" + std::to_string(level), normalize);
-        ++level;
-    }
-}
-
 void run_laplacian_pyramid(const std::string image_name, const int kernel_size, const int num_levels, const int size_crop, std::string image_folder, const bool show_figures)
 {
     if (image_folder == "")

@@ -55,3 +55,26 @@ int power(const int x, const int pow)
         res *= x;
     return res;
 }
+
+void show(const cv::Mat &image, const std::string title, const bool normalize)
+{
+    cv::Mat display = image;
+    if (normalize)
+    {
+        cv::normalize(image, display, 0.0f, 1.0f, cv::NORM_MINMAX);
+    }
+    cv::namedWindow(title, cv::WINDOW_NORMAL);
+    cv::resizeWindow(title, 512, 512);
+    // cv::moveWindow(title, 0, 0);
+    cv::imshow(title, image);
+    std::cout << "Press any key to continue" << std::endl;
+    const int key = cv::waitKey(0);
+}
+
+void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize) {
+    int level{};
+    for (const auto& laplacian_pyramid_level : laplacian_pyramid) {
+        show(laplacian_pyramid_level, "level" + std::to_string(level), normalize);
+        ++level;
+    }
+}

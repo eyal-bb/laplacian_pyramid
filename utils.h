@@ -24,3 +24,7 @@ T sum(const cv::Mat& mat)
 }
 
 int power(const int x, const int pow);
+
+void show(const cv::Mat &image, const std::string title="", const bool normalize=false);
+
+void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize=false);

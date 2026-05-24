@@ -30,10 +30,6 @@ cv::Mat up_sampling(const cv::Mat &image, const cv::Mat& kernel_1d);
 
 std::pair<std::vector<cv::Mat>, cv::Mat> calc_laplacian_pyramid(const cv::Mat& image, const size_t kernel_size, const int num_levels);
 
-void show(const cv::Mat &image, const std::string title="", const bool normalize=false);
-
-void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize=false);
-
 float reconstruct_and_compare(const std::vector<cv::Mat>& laplacian_pyramid, const cv::Mat& kernel_1d, const cv::Mat& image);
 
 float compare_images(const cv::Mat& image1, const cv::Mat& image2);
