@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:/Users/USER/vcpkg/installed/x64-mingw-static/include",
-                "C:/msys64/mingw64/include"
+                "C:/msys64/mingw64/include",
+                "C:/msys64/mingw64/include/opencv4"
             ],
             "defines": [
                 "_DEBUG",

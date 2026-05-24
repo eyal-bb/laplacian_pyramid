@@ -211,7 +211,12 @@ void run_laplacian_pyramid()
     image = crop_img(image, size_img);
     image.convertTo(image, CV_32FC1, 1 / 255.0F);
     
+    auto start = std::chrono::high_resolution_clock::now();
     const auto &[laplacian_pyramid, kernel_1d] = calc_laplacian_pyramid(image, kernel_size, num_levels);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "Time: " << duration.count() << " ms" << std::endl;
+
     auto relative_error = reconstruct_and_compare(laplacian_pyramid, kernel_1d, image);
     std::cout << "relative error in reconstruction- " << relative_error << std::endl;
 

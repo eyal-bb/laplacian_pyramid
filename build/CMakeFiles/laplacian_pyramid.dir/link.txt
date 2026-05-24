@@ -1,3 +1,0 @@
-C:\winlibs\mingw64\bin\cmake.exe -E rm -f CMakeFiles\laplacian_pyramid.dir/objects.a
-C:\msys64\mingw64\bin\ar.exe qc CMakeFiles\laplacian_pyramid.dir/objects.a @CMakeFiles\laplacian_pyramid.dir\objects1.rsp
-C:\msys64\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\laplacian_pyramid.dir/objects.a -Wl,--no-whole-archive -o laplacian_pyramid.exe -Wl,--out-implib,liblaplacian_pyramid.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\laplacian_pyramid.dir\linkLibs.rsp

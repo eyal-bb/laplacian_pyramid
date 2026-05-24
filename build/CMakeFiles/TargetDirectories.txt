@@ -1,5 +1,0 @@
-C:/Users/USER/C++_projects/laplacian_pyramid/build/CMakeFiles/core.dir
-C:/Users/USER/C++_projects/laplacian_pyramid/build/CMakeFiles/laplacian_pyramid.dir
-C:/Users/USER/C++_projects/laplacian_pyramid/build/CMakeFiles/tests.dir
-C:/Users/USER/C++_projects/laplacian_pyramid/build/CMakeFiles/edit_cache.dir
-C:/Users/USER/C++_projects/laplacian_pyramid/build/CMakeFiles/rebuild_cache.dir
