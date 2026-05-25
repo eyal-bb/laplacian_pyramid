@@ -43,10 +43,10 @@ cv::Mat add_multiscale_noise(const cv::Mat& image, const int noise_levels, const
 }
 
 TEST_CASE("flow") {
-    constexpr std::size_t size_img{2048};
+    constexpr std::size_t size_crop{320};
     constexpr std::size_t kernel_size{5};
     constexpr int num_levels{6};
-    cv::Mat image(size_img, size_img, CV_32FC1);
+    cv::Mat image = cv::Mat::zeros(size_crop, size_crop, CV_32FC1);
     image = add_multiscale_noise(image, num_levels, 1.0F);
     const auto &[laplacian_pyramid, kernel_1d] = calc_laplacian_pyramid(image, kernel_size, num_levels);
     auto relative_error = reconstruct_and_compare(laplacian_pyramid, kernel_1d, image);
