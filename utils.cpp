@@ -2,9 +2,9 @@
 #include <opencv2/opencv.hpp>
 #include "utils.h"
 
-#include <fstream>
-#include <sstream>
-#include <map>
+#include <fstream> // used for load_config alone
+#include <sstream> // used for load_config alone
+#include <map> // used for load_config alone
 
 
 cv::Mat load_img(const std::string& path)
