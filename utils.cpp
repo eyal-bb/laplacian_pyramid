@@ -85,7 +85,10 @@ void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, co
 
 cv::Mat prepare_image(const cv::Mat &image, const int size_crop)
 {
-    cv::Mat image_cropped{};
+    if (size_crop > image.rows || size_crop > image.cols)
+        throw std::invalid_argument("size_crop must be smaller than image size");
+
+    cv::Mat image_cropped = (size_crop > 0) ? crop_img(image, size_crop) : image;
     if (size_crop > 0)
         image_cropped = crop_img(image, size_crop);
         std::cout << "Croping image to " << std::to_string(size_crop) << " size" << std::endl;
