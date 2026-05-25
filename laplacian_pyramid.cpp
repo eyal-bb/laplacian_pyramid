@@ -183,7 +183,7 @@ cv::Mat reconstruct_from_laplacian_pyramid(const std::vector<cv::Mat>& laplacian
     return sum_laplacian_pyramid;
 }
 
-void run_laplacian_pyramid(const std::string image_name, const int kernel_size, const int num_levels, const int size_crop, std::string image_folder, const bool show_figures)
+void run_laplacian_pyramid(const std::string image_name, std::string image_folder, const int num_levels, const int kernel_size, const int size_crop, const bool show_figures)
 {
     if (image_folder == "")
         image_folder = std::string(PROJECT_DIR) + "/";

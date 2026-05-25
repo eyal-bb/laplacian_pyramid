@@ -30,3 +30,5 @@ void show(const cv::Mat &image, const std::string title="", const bool normalize
 void display_laplacian_pyramid(const std::vector<cv::Mat>& laplacian_pyramid, const bool normalize=false);
 
 cv::Mat prepare_image(const cv::Mat &image, const int size_crop);
+
+std::map<std::string, std::string> load_config(const std::string& path);

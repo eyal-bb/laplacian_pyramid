@@ -17,6 +17,7 @@ target_compile_definitions(core PRIVATE PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 
 add_executable(laplacian_pyramid main.cpp)
 target_link_libraries(laplacian_pyramid PRIVATE core)
+target_compile_definitions(laplacian_pyramid PRIVATE PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 
 add_executable(tests tests/tests.cpp)
 target_link_libraries(tests PRIVATE core Catch2::Catch2WithMain)

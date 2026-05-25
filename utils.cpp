@@ -2,6 +2,10 @@
 #include <opencv2/opencv.hpp>
 #include "utils.h"
 
+#include <fstream>
+#include <sstream>
+#include <map>
+
 
 cv::Mat load_img(const std::string& path)
 {
@@ -87,4 +91,17 @@ cv::Mat prepare_image(const cv::Mat &image, const int size_crop)
         std::cout << "Croping image to " << std::to_string(size_crop) << " size" << std::endl;
     image_cropped.convertTo(image_cropped, CV_32FC1, 1 / 255.0F);
     return image_cropped;
+}
+
+std::map<std::string, std::string> load_config(const std::string& path)
+{
+    std::map<std::string, std::string> config;
+    std::ifstream file(path);
+    std::string line;
+    while (std::getline(file, line)) {
+        auto pos = line.find('=');
+        if (pos != std::string::npos)
+            config[line.substr(0, pos)] = line.substr(pos + 1);
+    }
+    return config;
 }
