@@ -43,7 +43,7 @@ cv::Mat add_multiscale_noise(const cv::Mat& image, const int noise_levels, const
 }
 
 TEST_CASE("flow") {
-    constexpr std::size_t size_img{320};
+    constexpr std::size_t size_img{2048};
     constexpr std::size_t kernel_size{5};
     constexpr int num_levels{6};
     cv::Mat image(size_img, size_img, CV_32FC1);
